@@ -1,0 +1,8 @@
+Zum installieren wird Maven 2 und JRE 1.6 benoetigt
+
+Zum installieren: in das Verzeichnis mit dem pom.xml wechseln und
+den befehl mvn clean install ausfueren
+
+danach sollte ein target Ordner erstellt sein in diesem die *-jackofall.jar Datei liegt.
+
+diese Datei ist das Programm
