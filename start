@@ -1,0 +1,4 @@
+#\bin\bash
+
+mvn clean install
+java -jar target/Musicloader-1.0-SNAPSHOT-jackofall.jar
