@@ -11,8 +11,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.*;
 
 /**
@@ -43,14 +41,17 @@ public class MainFrame extends JFrame {
         chooser.setDialogTitle("Select files to upload");
         chooser.setCurrentDirectory(new File(
             "/Users/Uwe/Music/iTunes/iTunes Media/Music"));
-        files = new JList<>();
+        files = new JList<File>();
         JPanel tmp = new JPanel();
         tmp.setLayout(new BorderLayout());
         tmp.setSize(450, 100);
         tmp.add(files, BorderLayout.CENTER);
         addFiles = new JButton("open");
-        addFiles.addActionListener((ActionListener) e -> {
-            chooser.showDialog(null, "add");
+        addFiles.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                chooser.showDialog(null, "add");
+            }
         });
         removeFiles = new JButton("remove selected Files");
         removeFiles.setActionCommand(REMOVE_FILE_CMD);

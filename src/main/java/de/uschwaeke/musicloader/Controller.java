@@ -33,8 +33,8 @@ public class Controller implements ActionListener, KeyListener, ListDataListener
     public Controller() {
         service = new Service();
         logger = Logger.getLogger(getClass().getName());
-        files = new ArrayList<>();
-        listModel = new DefaultListModel<>();
+        files = new ArrayList<File>();
+        listModel = new DefaultListModel<File>();
         listModel.addListDataListener(this);
     }
 
@@ -52,37 +52,29 @@ public class Controller implements ActionListener, KeyListener, ListDataListener
         } else {
             headfull();
         }
-        files = new ArrayList<>();
+        files = new ArrayList<File>();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        switch (e.getActionCommand()) {
-            case MainFrame.SYNC_CMD:
-                gui.getSync().setEnabled(false);
-                headless(gui.getRemotedir().getText());
-                gui.getSync().setEnabled(true);
-                break;
-            case JFileChooser.APPROVE_SELECTION:
-
-                File[] fis = gui.getChooser().getSelectedFiles();
-                for (File f : fis) {
-                    files.add(f);
-                    listModel.addElement(f);
-                }
-                break;
-            case MainFrame.REMOVE_FILE_CMD:
-                List<File> sel = gui.getFiles().getSelectedValuesList();
-                files.removeAll(sel);
-                listModel.removeRange(gui.getFiles().getMinSelectionIndex(),
-                                      gui.getFiles().getMaxSelectionIndex());
-                break;
-            case MainFrame.CLEAR_FILES_CMD:
-                files.clear();
-                listModel.removeAllElements();
-                break;
-            default:
-                break;
+        if (e.getActionCommand().equals(MainFrame.SYNC_CMD)) {
+            gui.getSync().setEnabled(false);
+            headless(gui.getRemotedir().getText());
+            gui.getSync().setEnabled(true);
+        } else if (e.getActionCommand().equals(JFileChooser.APPROVE_SELECTION)) {
+            File[] fis = gui.getChooser().getSelectedFiles();
+            for (File f : fis) {
+                files.add(f);
+                listModel.addElement(f);
+            }
+        } else if (e.getActionCommand().equals(MainFrame.REMOVE_FILE_CMD)) {
+            List<File> sel = gui.getFiles().getSelectedValuesList();
+            files.removeAll(sel);
+            listModel.removeRange(gui.getFiles().getMinSelectionIndex(),
+                                  gui.getFiles().getMaxSelectionIndex());
+        } else if (e.getActionCommand().equals(MainFrame.CLEAR_FILES_CMD)) {
+            files.clear();
+            listModel.removeAllElements();
         }
     }
 
@@ -132,7 +124,11 @@ public class Controller implements ActionListener, KeyListener, ListDataListener
             service.startBeets(dst);
         } catch (FileNotFoundException ex) {
             logger.log(Level.SEVERE, null, ex);
-        } catch (JSchException | SftpException | IOException ex) {
+        } catch (JSchException ex) {
+            logger.log(Level.SEVERE, null, ex);
+        } catch (SftpException ex) {
+            logger.log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
             logger.log(Level.SEVERE, null, ex);
         }
     }
